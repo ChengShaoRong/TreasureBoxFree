@@ -45,7 +45,7 @@ namespace CSharpLike
         }
         void LateUpdate()
         {
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
             if (!runOnlyOnce)
 #endif
             {

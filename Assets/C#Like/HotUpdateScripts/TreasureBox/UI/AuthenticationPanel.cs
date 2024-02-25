@@ -259,7 +259,7 @@ namespace TreasureBox
                 if (newValue == AuthenticationPanel.UIType_LoginUI)
                     pos = new Vector2(-825f, 150f);
                 else if (newValue == AuthenticationPanel.UIType_RegisterUI)
-                    pos = new Vector2(-825f, 150f);
+                    pos = new Vector2(-275f, 150f);
                 else
                     pos = new Vector2(-1375f, 150f);
                 KissTweenAnchoredPosition.Tween(goTweenUIs, 0.3f, pos);
