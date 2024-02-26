@@ -15,87 +15,87 @@ namespace CSharpLike
 	public class KissUIEditor
 	{
 #if !DISABLE_TMP
-		[MenuItem("GameObject/KissUI/KissText(TextMeshPro)")]
+		[MenuItem("GameObject/KissUI/KissText(TextMeshPro))", false, 49)]
 		static void AddComponentKissTextTMP(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissText(TMP)");
 		}
 #endif
-		[MenuItem("GameObject/KissUI/KissToggle")]
+		[MenuItem("GameObject/KissUI/KissToggle)", false, 49)]
 		static void AddComponentKissToggle(MenuCommand menuCommand)
         {
 			LoadPrefab(menuCommand, "KissToggle");
 		}
 #if !DISABLE_TMP
-		[MenuItem("GameObject/KissUI/KissToggle(TextMeshPro)")]
+		[MenuItem("GameObject/KissUI/KissToggle(TextMeshPro))", false, 49)]
 		static void AddComponentKissToggleTMP(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissToggle(TMP)");
 		}
 #endif
-		[MenuItem("GameObject/KissUI/KissSlider")]
+		[MenuItem("GameObject/KissUI/KissSlider)", false, 49)]
 		static void AddComponentKissSlider(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissSlider");
 		}
-		[MenuItem("GameObject/KissUI/KissImage")]
+		[MenuItem("GameObject/KissUI/KissImage)", false, 49)]
 		static void AddComponentKissImage(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissImage");
 		}
-		[MenuItem("GameObject/KissUI/KissButton")]
+		[MenuItem("GameObject/KissUI/KissButton)", false, 49)]
 		static void AddComponentKissButton(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissButton");
 		}
 #if !DISABLE_TMP
-		[MenuItem("GameObject/KissUI/KissButton(TextMeshPro)")]
+		[MenuItem("GameObject/KissUI/KissButton(TextMeshPro))", false, 49)]
 		static void AddComponentKissButtonTMP(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissButton(TMP)");
 		}
 #endif
-		[MenuItem("GameObject/KissUI/KissScrollbar")]
+		[MenuItem("GameObject/KissUI/KissScrollbar)", false, 49)]
 		static void AddComponentKissScrollbar(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissScrollbar");
 		}
-		[MenuItem("GameObject/KissUI/KissInputField")]
+		[MenuItem("GameObject/KissUI/KissInputField)", false, 49)]
 		static void AddComponentKissInputField(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissInputField");
 		}
 #if !DISABLE_TMP
-		[MenuItem("GameObject/KissUI/KissInputField(TextMeshPro)")]
+		[MenuItem("GameObject/KissUI/KissInputField(TextMeshPro))", false, 49)]
 		static void AddComponentKissInputFieldTMP(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissInputField(TMP)");
 		}
 #endif
-		[MenuItem("GameObject/KissUI/KissPanel")]
+		[MenuItem("GameObject/KissUI/KissPanel)", false, 49)]
 		static void AddComponentKissPanel(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissPanel");
 		}
 #if !DISABLE_TMP
-		[MenuItem("GameObject/KissUI/KissPanel(TextMeshPro)")]
+		[MenuItem("GameObject/KissUI/KissPanel(TextMeshPro))", false, 49)]
 		static void AddComponentKissPanelTMP(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissPanel(TMP)");
 		}
 #endif
-		[MenuItem("GameObject/KissUI/KissScrollView")]
+		[MenuItem("GameObject/KissUI/KissScrollView)", false, 49)]
 		static void AddComponentKissScrollView(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissScrollView");
 		}
-		[MenuItem("GameObject/KissUI/KissDropdown")]
+		[MenuItem("GameObject/KissUI/KissDropdown)", false, 49)]
 		static void AddComponentKissDropdown(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissDropdown");
 		}
 #if !DISABLE_TMP
-		[MenuItem("GameObject/KissUI/KissDropdown(TextMeshPro)")]
+		[MenuItem("GameObject/KissUI/KissDropdown(TextMeshPro))", false, 49)]
 		static void AddComponentKissDropdownTMP(MenuCommand menuCommand)
 		{
 			LoadPrefab(menuCommand, "KissDropdown(TMP)");

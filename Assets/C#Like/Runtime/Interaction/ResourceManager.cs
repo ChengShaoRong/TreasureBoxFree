@@ -470,6 +470,7 @@ Config JSON format :
             };
             req.OnError += (error) => { action?.Invoke(error); };
         }
+#if _CSHARP_LIKE_
         /// <summary>
         /// Asynchronous load CSV file.
         /// </summary>
@@ -490,6 +491,7 @@ Config JSON format :
             };
             req.OnError += (error) => { action?.Invoke(error); };
         }
+#endif
         /// <summary>
         /// Asynchronous load CSV file (Without using class).
         /// </summary>

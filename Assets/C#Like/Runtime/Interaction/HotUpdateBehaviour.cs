@@ -287,7 +287,7 @@ namespace CSharpLike
 								}
 								else if (likeBehaviour != null)
 								{
-									FieldInfo fi = typeLikeBehaviour.GetField(field.name);
+									FieldInfo fi = typeLikeBehaviour.GetField(field.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 									if (fi != null)
 										fi.SetValue(likeBehaviour, value);
 								}
@@ -316,20 +316,18 @@ namespace CSharpLike
 							}
 							else if (likeBehaviour != null)
 							{
-								Type t = Type.GetType(field.typeFullName);
-								if (t != null)
-								{
-									IList listLikeBehaviour = Activator.CreateInstance(t) as IList;
-									foreach (object obj in list)
+                                FieldInfo fi = typeLikeBehaviour.GetField(field.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                                if (fi != null)
+                                {
+									IList listLikeBehaviour = Activator.CreateInstance(fi.FieldType) as IList;
+                                    foreach (object obj in list)
                                     {
-										if (obj == null)
-											hasNull = true;
-										listLikeBehaviour.Add(obj);
-									}
-									FieldInfo fi = typeLikeBehaviour.GetField(field.name);
-									if (fi != null)
-										fi.SetValue(likeBehaviour, listLikeBehaviour);
-								}
+                                        if (obj == null)
+                                            hasNull = true;
+                                        listLikeBehaviour.Add(obj);
+                                    }
+                                    fi.SetValue(likeBehaviour, listLikeBehaviour);
+                                }
 							}
 							if (isFirst && hasNull)
 								m_KissSerializeFieldsCheck.Add(field);
@@ -349,13 +347,9 @@ namespace CSharpLike
 							}
 							else if (likeBehaviour != null)
 							{
-								Type t = Type.GetType(field.typeFullName);
-								if (t != null)
-								{
-									FieldInfo fi = typeLikeBehaviour.GetField(field.name);
-									if (fi != null)
-										fi.SetValue(likeBehaviour, field.Value);
-								}
+								FieldInfo fi = typeLikeBehaviour.GetField(field.name);
+								if (fi != null)
+									fi.SetValue(likeBehaviour, field.Value);
 							}
 						}
 						break;
