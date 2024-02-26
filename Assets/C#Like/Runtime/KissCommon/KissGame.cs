@@ -12,6 +12,8 @@ namespace CSharpLike
 	{
         IEnumerator Start()
         {
+            //Set target frame rate, you should config it according to your requirements
+            Application.targetFrameRate = 30;
             //Initialize the hot update script system
             /// 1. In UnityEditor, FORCE using 'StreamingAssets/AssetBundles/games[Platform].json' if the 'automatic compile' in C#Like Setting panel WAS CHECKED.
             /// 2. Using the value of 'url' you just input.
