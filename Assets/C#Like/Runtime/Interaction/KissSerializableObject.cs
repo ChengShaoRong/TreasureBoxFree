@@ -86,7 +86,7 @@ namespace CSharpLike
                         string subTypeName = "";
                         if (typeFullName.StartsWith("System.Collections.Generic.List`1["))
                         {
-                            subTypeName = typeFullName.Substring(34, typeFullName.Length - 36);
+                            subTypeName = typeFullName.Substring(34, typeFullName.Length - 35);
                         }
                         else if (typeFullName.EndsWith("[]"))
                         {
@@ -111,7 +111,7 @@ namespace CSharpLike
                                     }
                                     else
                                     {
-                                        type = Type.GetType("System.Collections.Generic.List").MakeGenericType(new Type[] { subType });
+                                        type = typeof(List<>).MakeGenericType(new Type[] { subType });
                                     }
                                 }
                             }
@@ -542,7 +542,7 @@ namespace CSharpLike
                             values.Clear();
                         else if (supportInfo != null && supportInfo.miSet != null)
                         {
-                            Type type = Type.GetType("System.Collections.Generic.List").MakeGenericType(new Type[] { GetSubType(Type) });
+                            Type type = typeof(List<>).MakeGenericType(new Type[] { GetSubType(Type) });
                             supportInfo.miSet.Invoke(this, new object[] { Activator.CreateInstance(type, new object[] { value }) });
                         }
                         else
