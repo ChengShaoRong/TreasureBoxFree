@@ -34,12 +34,21 @@ namespace CSharpLike
     {
         public enum ObjectType
         {
+            //Type 
             Value,
             UnityEngineObject,
             LikeBehaviourObject,
+            //List<Type>
             Values,
             UnityEngineObjects,
-            LikeBehaviourObjects
+            LikeBehaviourObjects,
+            //Type[]
+            Values2,
+            UnityEngineObjects2,
+            LikeBehaviourObjects2,
+            //class
+            Class,
+            Classes
         }
         public string name;
         public string typeFullName;
@@ -48,6 +57,8 @@ namespace CSharpLike
         public List<UnityEngine.Object> objs = new List<UnityEngine.Object>();
         public List<string> values = new List<string>();
         public ObjectType objectType;
+        //public KissSerializableObject _class;
+        //public List<KissSerializableObject> _classes;
         public string TypeFullName => typeFullName.Replace("+",".");
         Type Type
         {
@@ -70,11 +81,53 @@ namespace CSharpLike
                         if (type != null)
                             break;
                     }
+                    if (type == null)
+                    {
+                        string subTypeName = "";
+                        if (typeFullName.StartsWith("System.Collections.Generic.List`1["))
+                        {
+                            subTypeName = typeFullName.Substring(34, typeFullName.Length - 36);
+                        }
+                        else if (typeFullName.EndsWith("[]"))
+                        {
+                            subTypeName = typeFullName.Substring(0, typeFullName.Length - 2);
+                        }
+                        if (subTypeName != "")
+                        {
+                            Type subType = Type.GetType(subTypeName);
+                            if (subType == null)
+                            {
+                                foreach (var item in mAssemblys)
+                                {
+                                    subType = Type.GetType(subTypeName + "," + item);
+                                    if (subType != null)
+                                        break;
+                                }
+                                if (subType != null)
+                                {
+                                    if (typeFullName.EndsWith("[]"))
+                                    {
+                                        type = subType.MakeArrayType();
+                                    }
+                                    else
+                                    {
+                                        type = Type.GetType("System.Collections.Generic.List").MakeGenericType(new Type[] { subType });
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 #endif
                 if (type == null && Internal.CSL_VirtualMachine.Instance != null)
                 {
-                    Internal.CSL_TypeBase btype = Internal.CSL_VirtualMachine.Instance.GetMyIType(TypeFullName);
+                    string temp = TypeFullName;
+                    if (temp.StartsWith("System.Collections.Generic.List`1["))
+                    {
+                        temp = temp.Replace("System.Collections.Generic.List`1[", "List<");
+                        temp = temp.Substring(0, temp.Length-1)+">";
+                    }
+                    Internal.CSL_TypeBase btype = Internal.CSL_VirtualMachine.Instance.GetMyIType(temp);
                     if (btype != null)
                         type = btype.type;
                 }
@@ -156,6 +209,30 @@ namespace CSharpLike
 
         SupportInfo supportInfo;
 
+
+        public static Array ResizeArray(Array array, int newSize)
+        {
+            Array arrayNew = Activator.CreateInstance(array.GetType(), new object[] { newSize }) as Array;
+            int oldCount = array.Length;
+            if (newSize > 0 && oldCount > 0)
+                Array.Copy(array, arrayNew, Mathf.Min(newSize, oldCount));
+            return arrayNew;
+        }
+
+        static Dictionary<Type, Type> mSubTypes = new Dictionary<Type, Type>();
+        public static Type GetSubType(Type type)
+        {
+            if (type == null)
+                return null;
+            if (mSubTypes.TryGetValue(type, out Type subType))
+                return subType;
+            if (type.IsArray)
+                subType = type.Assembly.GetType(type.FullName.Substring(0, type.FullName.Length - 2));
+            else
+                subType = type.GenericTypeArguments[0];
+            mSubTypes[type] = subType;
+            return subType;
+        }
         public KissSerializableObject(FieldInfo fieldInfo)
         {
             name = fieldInfo.Name;
@@ -172,6 +249,17 @@ namespace CSharpLike
                 else
                     objectType = ObjectType.Values;
             }
+            else if (typeFullName.EndsWith("[]"))
+            {
+                //ProcessFullName(ref typeFullName);
+                Type type = GetSubType(fieldInfo.FieldType);
+                if (type.IsSubclassOf(typeof(LikeBehaviour)))
+                    objectType = ObjectType.LikeBehaviourObjects2;
+                else if (type.IsSubclassOf(typeof(UnityEngine.Object)))
+                    objectType = ObjectType.UnityEngineObjects2;
+                else
+                    objectType = ObjectType.Values2;
+            }
             else
             {
                 if (fieldInfo.FieldType.IsSubclassOf(typeof(LikeBehaviour)))
@@ -186,6 +274,7 @@ namespace CSharpLike
         {
             public MethodInfo miGet;
             public MethodInfo miSet;
+            public MethodInfo miToArray;
         }
         static Dictionary<Type, SupportInfo> mSupportTypes = null;
         static SupportInfo GetSupportInfo(Type type)
@@ -207,6 +296,21 @@ namespace CSharpLike
                         supportInfo.miSet = typeKissSerializableObject.GetMethod($"Set{typeName}Value");
                     if (supportInfo.miSet == null)
                         supportInfo = null;
+                }
+            }
+            else if (type.FullName.EndsWith("[]"))
+            {
+                Type type1 = GetSubType(type);
+                if (!type1.IsSubclassOf(typeof(LikeBehaviour)) && !type1.IsSubclassOf(typeof(UnityEngine.Object)))
+                {
+                    string typeName = "List" + type1.FullName.Replace("System.", "").Replace("UnityEngine.", "").Replace(".", "").Replace("+", "");
+                    supportInfo.miGet = typeKissSerializableObject.GetMethod($"Get{typeName}Value");
+                    if (supportInfo.miGet != null)
+                        supportInfo.miSet = typeKissSerializableObject.GetMethod($"Set{typeName}Value");
+                    if (supportInfo.miSet == null)
+                        supportInfo = null;
+                    if (supportInfo != null && supportInfo.miGet != null)
+                        supportInfo.miToArray = type.GetMethod("ToArray");
                 }
             }
             else
@@ -282,10 +386,34 @@ namespace CSharpLike
                             }
                             return list;
                         }
+                    case ObjectType.LikeBehaviourObjects2:
+                        {
+                            List<object> list = new List<object>();
+                            foreach (UnityEngine.Object _obj in objs)
+                            {
+                                GameObject gameObject = _obj as GameObject;
+                                object _obj_ = null;
+                                if (gameObject != null)
+                                {
+                                    foreach (HotUpdateBehaviour behaviour in gameObject.GetComponents<HotUpdateBehaviour>())
+                                    {
+                                        if (behaviour.bindHotUpdateClassFullName == typeFullName)
+                                        {
+                                            _obj_ = behaviour.ScriptInstance;
+                                            break;
+                                        }
+                                    }
+                                }
+                                list.Add(_obj_);
+                            }
+                            return list.ToArray();
+                        }
                     case ObjectType.UnityEngineObject:
                         return obj;
                     case ObjectType.UnityEngineObjects:
                         return objs;
+                    case ObjectType.UnityEngineObjects2:
+                        return objs.ToArray();
                     case ObjectType.Value:
                         if (supportInfo == null)
                             supportInfo = GetSupportInfo(Type);
@@ -298,6 +426,17 @@ namespace CSharpLike
                             supportInfo = GetSupportInfo(Type);
                         if (supportInfo != null && supportInfo.miGet != null)
                             return supportInfo.miGet.Invoke(this, null);
+                        Debug.LogError($"Not support serializable type '{typeFullName}'");
+                        return Activator.CreateInstance(Type);
+                    case ObjectType.Values2:
+                        if (supportInfo == null)
+                            supportInfo = GetSupportInfo(Type);
+                        if (supportInfo != null && supportInfo.miGet != null)
+                        {
+                            object o = supportInfo.miGet.Invoke(this, null);
+                            if (o != null && supportInfo.miToArray != null)
+                                return supportInfo.miToArray.Invoke(o, null);
+                        }
                         Debug.LogError($"Not support serializable type '{typeFullName}'");
                         return Activator.CreateInstance(Type);
                     default:
@@ -329,27 +468,31 @@ namespace CSharpLike
                         }
                         break;
                     case ObjectType.LikeBehaviourObjects:
+                    case ObjectType.LikeBehaviourObjects2:
                         {
-                            objs.Clear();
-                            System.Collections.IList list = value as System.Collections.IList;
-                            if (list != null)
+                            if (objs != value)
                             {
-                                foreach(object _obj in list)
+                                objs.Clear();
+                                System.Collections.IList list = value as System.Collections.IList;
+                                if (list != null)
                                 {
-                                    GameObject gameObject = _obj as GameObject;
-                                    UnityEngine.Object _obj_ = null;
-                                    if (gameObject != null)
+                                    foreach (object _obj in list)
                                     {
-                                        foreach (HotUpdateBehaviour behaviour in gameObject.GetComponents<HotUpdateBehaviour>())
+                                        GameObject gameObject = _obj as GameObject;
+                                        UnityEngine.Object _obj_ = null;
+                                        if (gameObject != null)
                                         {
-                                            if (behaviour.bindHotUpdateClassFullName == typeFullName)
+                                            foreach (HotUpdateBehaviour behaviour in gameObject.GetComponents<HotUpdateBehaviour>())
                                             {
-                                                _obj_ = behaviour.ScriptInstance as UnityEngine.Object;
-                                                break;
+                                                if (behaviour.bindHotUpdateClassFullName == typeFullName)
+                                                {
+                                                    _obj_ = behaviour.ScriptInstance as UnityEngine.Object;
+                                                    break;
+                                                }
                                             }
                                         }
+                                        objs.Add(_obj_);
                                     }
-                                    objs.Add(_obj_);
                                 }
                             }
                         }
@@ -358,14 +501,18 @@ namespace CSharpLike
                         obj = (UnityEngine.Object)value;
                         break;
                     case ObjectType.UnityEngineObjects:
+                    case ObjectType.UnityEngineObjects2:
                         {
-                            objs.Clear();
-                            System.Collections.IList list = value as System.Collections.IList;
-                            if (list != null)
+                            if (objs != value)
                             {
-                                foreach (UnityEngine.Object _obj in list)
+                                objs.Clear();
+                                System.Collections.IList list = value as System.Collections.IList;
+                                if (list != null)
                                 {
-                                    objs.Add(_obj);
+                                    foreach (UnityEngine.Object _obj in list)
+                                    {
+                                        objs.Add(_obj);
+                                    }
                                 }
                             }
                         }
@@ -385,6 +532,19 @@ namespace CSharpLike
                             values.Clear();
                         else if (supportInfo != null && supportInfo.miSet != null)
                             supportInfo.miSet.Invoke(this, new object[] { value });
+                        else
+                            Debug.LogError($"Not support serializable type '{typeFullName}'");
+                        break;
+                    case ObjectType.Values2:
+                        if (supportInfo == null)
+                            supportInfo = GetSupportInfo(Type.GetType(typeFullName));
+                        if (value == null)
+                            values.Clear();
+                        else if (supportInfo != null && supportInfo.miSet != null)
+                        {
+                            Type type = Type.GetType("System.Collections.Generic.List").MakeGenericType(new Type[] { GetSubType(Type) });
+                            supportInfo.miSet.Invoke(this, new object[] { Activator.CreateInstance(type, new object[] { value }) });
+                        }
                         else
                             Debug.LogError($"Not support serializable type '{typeFullName}'");
                         break;

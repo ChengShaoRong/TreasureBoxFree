@@ -246,6 +246,139 @@ namespace CSharpLike
 				BindField(m_KissSerializeFieldsCheck);
 			}
         }
+#if UNITY_EDITOR
+		public void UpdateFieldInEditor(KissSerializableObject field)
+		{
+			if (!Application.isPlaying)
+				return;
+			object objInstance = ScriptInstance;
+			SInstance sInstance = objInstance is SInstance ? objInstance as SInstance : null;
+			LikeBehaviour likeBehaviour = objInstance is LikeBehaviour ? objInstance as LikeBehaviour : null;
+			if (sInstance == null && likeBehaviour == null)
+			{
+				return;
+			}
+			Type typeLikeBehaviour = likeBehaviour?.GetType();
+			switch (field.objectType)
+			{
+				case KissSerializableObject.ObjectType.LikeBehaviourObject:
+					{
+						object value = field.BehaviourValue?.ScriptInstance;
+						if (value != null)
+						{
+							if (sInstance != null)
+							{
+								if (!sInstance.SetMemberValue(field.name, value))
+								{
+									Debug.LogWarning($"Not exist member '{field.name}' in GameObject '{name}'");
+								}
+							}
+							else if (likeBehaviour != null)
+							{
+								FieldInfo fi = typeLikeBehaviour.GetField(field.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+								if (fi != null)
+									fi.SetValue(likeBehaviour, value);
+							}
+						}
+					}
+					break;
+				case KissSerializableObject.ObjectType.LikeBehaviourObjects:
+					{
+						List<object> list = field.Value as List<object>;
+						bool hasNull = false;
+						if (sInstance != null)
+						{
+							List<SInstance> listInstance = new List<SInstance>();
+							foreach (SInstance obj in list)
+							{
+								if (obj == null)
+									hasNull = true;
+								listInstance.Add(obj);
+							}
+							if (!sInstance.SetMemberValue(field.name, listInstance))
+							{
+								Debug.LogWarning($"Not exist member '{field.name}' in GameObject '{name}'");
+							}
+						}
+						else if (likeBehaviour != null)
+						{
+							FieldInfo fi = typeLikeBehaviour.GetField(field.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+							if (fi != null)
+							{
+								IList listLikeBehaviour = Activator.CreateInstance(fi.FieldType) as IList;
+								foreach (object obj in list)
+								{
+									if (obj == null)
+										hasNull = true;
+									listLikeBehaviour.Add(obj);
+								}
+								fi.SetValue(likeBehaviour, listLikeBehaviour);
+							}
+						}
+					}
+					break;
+				case KissSerializableObject.ObjectType.LikeBehaviourObjects2:
+					{
+						object[] list = field.Value as object[];
+						bool hasNull = false;
+						if (sInstance != null)
+						{
+							SInstance[] listInstance = new SInstance[list.Length];
+							for (int i = 0; i < list.Length; i++)
+							{
+								SInstance obj = list[i] as SInstance;
+								if (obj == null)
+									hasNull = true;
+								listInstance[i] = obj;
+							}
+							if (!sInstance.SetMemberValue(field.name, listInstance))
+							{
+								Debug.LogWarning($"Not exist member '{field.name}' in GameObject '{name}'");
+							}
+						}
+						else if (likeBehaviour != null)
+						{
+							FieldInfo fi = typeLikeBehaviour.GetField(field.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+							if (fi != null)
+							{
+								Array listLikeBehaviour = Activator.CreateInstance(fi.FieldType, new object[] { list.Length }) as Array;
+								for (int i = 0; i < list.Length; i++)
+								{
+									object obj = list[i];
+									if (obj == null)
+										hasNull = true;
+									listLikeBehaviour.SetValue(obj, i);
+								}
+								fi.SetValue(likeBehaviour, listLikeBehaviour);
+							}
+						}
+					}
+					break;
+				case KissSerializableObject.ObjectType.UnityEngineObject:
+				case KissSerializableObject.ObjectType.Value:
+				case KissSerializableObject.ObjectType.UnityEngineObjects:
+				case KissSerializableObject.ObjectType.Values:
+				case KissSerializableObject.ObjectType.UnityEngineObjects2:
+				case KissSerializableObject.ObjectType.Values2:
+					{
+						if (sInstance != null)
+						{
+							if (!sInstance.SetMemberValue(field.name, field.Value))
+							{
+								Debug.LogWarning($"Not exist member '{field.name}' in GameObject '{name}'");
+							}
+						}
+						else if (likeBehaviour != null)
+						{
+							FieldInfo fi = typeLikeBehaviour.GetField(field.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+							if (fi != null)
+								fi.SetValue(likeBehaviour, field.Value);
+						}
+					}
+					break;
+			}
+		}
+#endif
 		void BindField(List<KissSerializableObject> fields)
         {
 			bool isFirst;
@@ -333,10 +466,51 @@ namespace CSharpLike
 								m_KissSerializeFieldsCheck.Add(field);
 						}
 						break;
+					case KissSerializableObject.ObjectType.LikeBehaviourObjects2:
+						{
+							object[] list = field.Value as object[];
+							bool hasNull = false;
+							if (sInstance != null)
+							{
+								SInstance[] listInstance = new SInstance[list.Length];
+								for(int i=0; i< list.Length; i++)
+								{
+									SInstance obj = list[i] as SInstance;
+									if (obj == null)
+										hasNull = true;
+									listInstance[i] = obj;
+								}
+								if (!sInstance.SetMemberValue(field.name, listInstance))
+								{
+									Debug.LogWarning($"Not exist member '{field.name}' in GameObject '{name}'");
+								}
+							}
+							else if (likeBehaviour != null)
+							{
+								FieldInfo fi = typeLikeBehaviour.GetField(field.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+								if (fi != null)
+								{
+									Array listLikeBehaviour = Activator.CreateInstance(fi.FieldType, new object[] { list.Length }) as Array;
+									for (int i = 0; i < list.Length; i++)
+									{
+										object obj = list[i];
+										if (obj == null)
+											hasNull = true;
+										listLikeBehaviour.SetValue(obj, i);
+									}
+									fi.SetValue(likeBehaviour, listLikeBehaviour);
+								}
+							}
+							if (isFirst && hasNull)
+								m_KissSerializeFieldsCheck.Add(field);
+						}
+						break;
 					case KissSerializableObject.ObjectType.UnityEngineObject:
 					case KissSerializableObject.ObjectType.Value:
 					case KissSerializableObject.ObjectType.UnityEngineObjects:
 					case KissSerializableObject.ObjectType.Values:
+					case KissSerializableObject.ObjectType.UnityEngineObjects2:
+					case KissSerializableObject.ObjectType.Values2:
 						{
 							if (sInstance != null)
 							{

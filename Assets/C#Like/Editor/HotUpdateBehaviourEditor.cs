@@ -120,6 +120,8 @@ namespace UnityEditor.UI
         Dictionary<string, GUIContent> mContentCaches = new Dictionary<string, GUIContent>();
         static string ConvertEasyName(string strName)
         {
+            if (strName.Length > 2 && strName.StartsWith("m_"))
+                strName = strName.Substring(2);
             char[] strs = strName.ToCharArray();
             int length = strs.Length;
             if (length == 0)
@@ -328,6 +330,7 @@ namespace UnityEditor.UI
                                     {
                                         obj.obj = _objNew;
                                         mySerializedProperty.obj.objectReferenceValue = _objNew;
+                                        hub.UpdateFieldInEditor(obj);
                                     }
                                 }
                                 break;
@@ -339,6 +342,7 @@ namespace UnityEditor.UI
                                     {
                                         obj.obj = _objNew;
                                         mySerializedProperty.obj.objectReferenceValue = _objNew;
+                                        hub.UpdateFieldInEditor(obj);
                                     }
                                 }
                                 break;
@@ -353,6 +357,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetStringValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -367,6 +372,7 @@ namespace UnityEditor.UI
                                                 {
                                                     obj.SetCharValue(valueNew);
                                                     mySerializedProperty.value.stringValue = obj.value;
+                                                    hub.UpdateFieldInEditor(obj);
                                                 }
                                             }
                                         }
@@ -379,6 +385,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetInt64Value(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -390,6 +397,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetUInt64Value(Convert.ToUInt64(valueNew));
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -401,6 +409,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetInt32Value(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -412,6 +421,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetUInt32Value(Convert.ToUInt32(valueNew));
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -423,6 +433,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetInt16Value(Convert.ToInt16(valueNew));
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -434,6 +445,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetUInt16Value(Convert.ToUInt16(valueNew));
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -445,6 +457,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetByteValue(Convert.ToByte(valueNew));
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -456,6 +469,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetSByteValue(Convert.ToSByte(valueNew));
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -467,6 +481,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetSingleValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -478,6 +493,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetDoubleValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -489,6 +505,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetBooleanValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -500,6 +517,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetVector2Value(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -511,6 +529,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetVector3Value(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -522,6 +541,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetVector4Value(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -533,6 +553,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetColorValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -544,6 +565,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetColor32Value(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -557,6 +579,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetCSharpLikeJSONDataValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -568,6 +591,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetVector2IntValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -579,6 +603,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetVector3IntValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -599,6 +624,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetMatrix4x4Value(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -610,6 +636,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetRectValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -622,6 +649,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetRectIntValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -633,6 +661,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetBoundsValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -645,6 +674,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetBoundsIntValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -656,6 +686,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.SetLayerMaskValue(valueNew);
                                                 mySerializedProperty.value.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         break;
@@ -671,6 +702,7 @@ namespace UnityEditor.UI
                                                 {
                                                     obj.Value = valueNew;
                                                     mySerializedProperty.obj.stringValue = obj.value;
+                                                    hub.UpdateFieldInEditor(obj);
                                                 }
                                             }
                                             catch
@@ -682,19 +714,14 @@ namespace UnityEditor.UI
                                 }
                                 break;
                             case KissSerializableObject.ObjectType.Values:
+                            case KissSerializableObject.ObjectType.Values2:
                                 {
-                                    string typeName = fi.FieldType.FullName.Substring(35);
-                                    typeName = typeName.Substring(0, typeName.Length - 1);
-                                    int i = typeName.IndexOf(',');
-                                    if (i > 0)
-                                        typeName = typeName.Substring(0, i);
-                                    else if (typeName.EndsWith("]"))
-                                        typeName = typeName.Substring(0, typeName.Length - 1);
-                                    switch (typeName)
+                                    Type subType = KissSerializableObject.GetSubType(fi.FieldType);
+                                    switch (subType.FullName)
                                     {
                                         case "System.String":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     string _valueNew = EditorGUILayout.TextField("   |- Element " + index, (string)_valueOld);
                                                     if (_valueNew != (string)_valueOld)
@@ -703,13 +730,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew;
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, "");
                                             }
                                             break;
                                         case "System.Char":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     char[] chars = EditorGUILayout.TextField("   |- Element " + index, _valueOld.ToString()).ToCharArray();
                                                     if (chars.Length > 0)
@@ -721,6 +749,7 @@ namespace UnityEditor.UI
                                                             valueOld[index] = _valueNew;
                                                             _sp.stringValue = _valueNew.ToString();
                                                             obj.Value = valueOld;
+                                                            hub.UpdateFieldInEditor(obj);
                                                         }
                                                     }
                                                 }, default(char));
@@ -728,7 +757,7 @@ namespace UnityEditor.UI
                                             break;
                                         case "System.Int64":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     long _valueNew = (obj.Range != null) ? Convert.ToInt64(Slider(obj.Range, _valueOld, "   |- Element " + index)) : EditorGUILayout.LongField("   |- Element " + index, (long)_valueOld);
                                                     if (_valueNew != (long)_valueOld)
@@ -737,13 +766,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString();
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(long));
                                             }
                                             break;
                                         case "System.UInt64":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     ulong _valueNew = Convert.ToUInt64((obj.Range != null) ? Slider(obj.Range, _valueOld, "   |- Element " + index) : EditorGUILayout.LongField("   |- Element " + index, Convert.ToInt64(_valueOld)));
                                                     if (_valueNew != (ulong)_valueOld)
@@ -752,13 +782,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString();
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(ulong));
                                             }
                                             break;
                                         case "System.Int32":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     int _valueNew = (obj.Range != null) ? Slider(obj.Range, (int)_valueOld, "   |- Element " + index) : EditorGUILayout.IntField("   |- Element " + index, (int)_valueOld);
                                                     if (_valueNew != (int)_valueOld)
@@ -767,13 +798,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString();
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(int));
                                             }
                                             break;
                                         case "System.UInt32":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     uint _valueNew = Convert.ToUInt32((obj.Range != null) ? Slider(obj.Range, _valueOld, "   |- Element " + index) : EditorGUILayout.LongField("   |- Element " + index, (uint)_valueOld));
                                                     if (_valueNew != (uint)_valueOld)
@@ -782,13 +814,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString();
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(uint));
                                             }
                                             break;
                                         case "System.Int16":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     short _valueNew = Convert.ToInt16((obj.Range != null) ? Slider(obj.Range, _valueOld, "   |- Element " + index) : EditorGUILayout.IntField("   |- Element " + index, Convert.ToInt32(_valueOld)));
                                                     if (_valueNew != (short)_valueOld)
@@ -797,13 +830,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString();
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(short));
                                             }
                                             break;
                                         case "System.UInt16":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     ushort _valueNew = Convert.ToUInt16((obj.Range != null) ? Slider(obj.Range, _valueOld, "   |- Element " + index) : EditorGUILayout.IntField("   |- Element " + index, Convert.ToInt32(_valueOld)));
                                                     if (_valueNew != (short)_valueOld)
@@ -812,13 +846,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString();
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(ushort));
                                             }
                                             break;
                                         case "System.Byte":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     byte _valueNew = Convert.ToByte((obj.Range != null) ? Slider(obj.Range, _valueOld, "   |- Element " + index) : EditorGUILayout.IntField("   |- Element " + index, Convert.ToInt32(_valueOld)));
                                                     if (_valueNew != (byte)_valueOld)
@@ -827,13 +862,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString();
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(byte));
                                             }
                                             break;
                                         case "System.SByte":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     sbyte _valueNew = Convert.ToSByte((obj.Range != null) ? Slider(obj.Range, _valueOld, "   |- Element " + index) : EditorGUILayout.IntField("   |- Element " + index, Convert.ToInt32(_valueOld)));
                                                     if (_valueNew != (sbyte)_valueOld)
@@ -842,13 +878,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString();
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(sbyte));
                                             }
                                             break;
                                         case "System.Single":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     float _valueNew = (obj.Range != null) ? Slider(obj.Range, _valueOld, "   |- Element " + index) : EditorGUILayout.FloatField("   |- Element " + index, (float)_valueOld);
                                                     if (_valueNew != (float)_valueOld)
@@ -857,13 +894,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString(CultureInfo.InvariantCulture);
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(float));
                                             }
                                             break;
                                         case "System.Double":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     double _valueNew = (obj.Range != null) ? Convert.ToDouble(Slider(obj.Range, _valueOld, "   |- Element " + index)) : EditorGUILayout.DoubleField("   |- Element " + index, (double)_valueOld);
                                                     if (_valueNew != (float)_valueOld)
@@ -872,13 +910,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString(CultureInfo.InvariantCulture);
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(double));
                                             }
                                             break;
                                         case "System.Boolean":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     bool _valueNew = EditorGUILayout.Toggle("   |- Element " + index, (bool)_valueOld);
                                                     if (_valueNew != (bool)_valueOld)
@@ -887,13 +926,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         _sp.stringValue = _valueNew.ToString();
                                                         obj.Value = valueOld;
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(bool));
                                             }
                                             break;
                                         case "UnityEngine.Vector2":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     Vector2 _valueNew = EditorGUILayout.Vector2Field("   |- Element " + index, (Vector2)_valueOld);
                                                     if (_valueNew != (Vector2)_valueOld)
@@ -902,13 +942,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(Vector2));
                                             }
                                             break;
                                         case "UnityEngine.Vector3":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     Vector3 _valueNew = EditorGUILayout.Vector3Field("   |- Element " + index, (Vector3)_valueOld);
                                                     if (_valueNew != (Vector3)_valueOld)
@@ -917,13 +958,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(Vector3));
                                             }
                                             break;
                                         case "UnityEngine.Vector4":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     Vector4 _valueNew = EditorGUILayout.Vector4Field("   |- Element " + index, (Vector4)_valueOld);
                                                     if (_valueNew != (Vector4)_valueOld)
@@ -932,13 +974,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(Vector4));
                                             }
                                             break;
                                         case "UnityEngine.Color":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     Color _valueNew = EditorGUILayout.Vector4Field("   |- Element " + index, (Color)_valueOld);
                                                     if (_valueNew != (Color)_valueOld)
@@ -947,13 +990,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, Color.white);
                                             }
                                             break;
                                         case "UnityEngine.Color32":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     Color _valueNew = EditorGUILayout.Vector4Field("   |- Element " + index, (Color)_valueOld);
                                                     if (_valueNew != (Color)_valueOld)
@@ -962,13 +1006,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = (Color32)_valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, Color.white);
                                             }
                                             break;
                                         case "CSharpLike.JSONData":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     string _valueOld_ = _valueOld == null ? "{}" : ((JSONData)_valueOld).ToJson();
                                                     string _valueNew = EditorGUILayout.TextField("   |- Element " + index, _valueOld_);
@@ -980,13 +1025,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew_;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, JSONData.NewDictionary());
                                             }
                                             break;
                                         case "UnityEngine.Vector2Int":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     Vector2Int _valueNew = EditorGUILayout.Vector2IntField("   |- Element " + index, (Vector2Int)_valueOld);
                                                     if (_valueNew != (Vector2Int)_valueOld)
@@ -995,13 +1041,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(Vector2Int));
                                             }
                                             break;
                                         case "UnityEngine.Vector3Int":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     Vector3Int _valueNew = EditorGUILayout.Vector3IntField("   |- Element " + index, (Vector3Int)_valueOld);
                                                     if (_valueNew != (Vector3Int)_valueOld)
@@ -1010,13 +1057,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(Vector3Int));
                                             }
                                             break;
                                         case "UnityEngine.Matrix4x4":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     EditorGUILayout.LabelField("   |- Element " + index);
                                                     Matrix4x4 _valueOld_ = (Matrix4x4)_valueOld;
@@ -1031,13 +1079,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew_;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(Matrix4x4));
                                             }
                                             break;
                                         case "UnityEngine.Rect":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     Rect _valueNew = EditorGUILayout.RectField("   |- Element " + index, (Rect)_valueOld);
                                                     if (_valueNew != (Rect)_valueOld)
@@ -1046,13 +1095,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(Rect));
                                             }
                                             break;
                                         case "UnityEngine.RectInt":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     RectInt _valueOld_ = (RectInt)_valueOld;
                                                     RectInt _valueNew = EditorGUILayout.RectIntField("   |- Element " + index, _valueOld_);
@@ -1062,13 +1112,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(RectInt));
                                             }
                                             break;
                                         case "UnityEngine.Bounds":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     Bounds _valueNew = EditorGUILayout.BoundsField("   |- Element " + index, (Bounds)_valueOld);
                                                     if (_valueNew != (Bounds)_valueOld)
@@ -1077,13 +1128,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(Bounds));
                                             }
                                             break;
                                         case "UnityEngine.BoundsInt":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     BoundsInt _valueOld_ = (BoundsInt)_valueOld;
                                                     BoundsInt _valueNew = EditorGUILayout.BoundsIntField("   |- Element " + index, _valueOld_);
@@ -1093,13 +1145,14 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(BoundsInt));
                                             }
                                             break;
                                         case "UnityEngine.LayerMask":
                                             {
-                                                ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
                                                     LayerMask _valueNew = EditorGUILayout.LayerField("   |- Element " + index, (LayerMask)_valueOld);
                                                     if (_valueNew != (LayerMask)_valueOld)
@@ -1108,6 +1161,7 @@ namespace UnityEditor.UI
                                                         valueOld[index] = _valueNew;
                                                         obj.Value = valueOld;
                                                         _sp.stringValue = obj.values[index];
+                                                        hub.UpdateFieldInEditor(obj);
                                                     }
                                                 }, default(LayerMask));
                                             }
@@ -1116,7 +1170,7 @@ namespace UnityEditor.UI
                                             {
                                                 try
                                                 {
-                                                    ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                                    ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                     {
                                                         string _valueOld_ = (string)_valueOld;
                                                         if (_valueOld_ == null)
@@ -1128,6 +1182,7 @@ namespace UnityEditor.UI
                                                             valueOld[index] = _valueNew;
                                                             _sp.stringValue = _valueNew;
                                                             obj.Value = valueOld;
+                                                            hub.UpdateFieldInEditor(obj);
                                                         }
                                                     }, "");
                                                 }
@@ -1141,23 +1196,26 @@ namespace UnityEditor.UI
                                 }
                                 break;
                             case KissSerializableObject.ObjectType.UnityEngineObjects:
+                            case KissSerializableObject.ObjectType.UnityEngineObjects2:
                                 {
-                                    ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                    ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                     {
-                                        UnityEngine.Object _valueNew = EditorGUILayout.ObjectField("   |- Element " + index, (UnityEngine.Object)_valueOld, fi.FieldType, true);
+                                        UnityEngine.Object _valueNew = EditorGUILayout.ObjectField("   |- Element " + index, (UnityEngine.Object)_valueOld, KissSerializableObject.GetSubType(fi.FieldType), true);
                                         if (_valueNew != (UnityEngine.Object)_valueOld)
                                         {
                                             SerializedProperty _sp = sp.GetArrayElementAtIndex(index);
                                             valueOld[index] = _valueNew;
                                             _sp.objectReferenceValue = obj.objs[index];
                                             obj.Value = valueOld;
+                                            hub.UpdateFieldInEditor(obj);
                                         }
                                     }, null);
                                 }
                                 break;
                             case KissSerializableObject.ObjectType.LikeBehaviourObjects:
+                            case KissSerializableObject.ObjectType.LikeBehaviourObjects2:
                                 {
-                                    ProcessList(obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
+                                    ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                     {
                                         UnityEngine.Object _valueNew = EditorGUILayout.ObjectField("   |- Element " + index, (UnityEngine.Object)_valueOld, typeof(HotUpdateBehaviour), true);
                                         if (_valueNew != (UnityEngine.Object)_valueOld)
@@ -1166,6 +1224,7 @@ namespace UnityEditor.UI
                                             valueOld[index] = _valueNew;
                                             _sp.objectReferenceValue = obj.objs[index];
                                             obj.Value = valueOld;
+                                            hub.UpdateFieldInEditor(obj);
                                         }
                                     }, null);
                                 }
@@ -1180,7 +1239,8 @@ namespace UnityEditor.UI
                                         if (_objOld != _objNew)
                                         {
                                             obj.obj = _objNew;
-                                            mySerializedProperty.obj.objectReferenceValue = _objNew; 
+                                            mySerializedProperty.obj.objectReferenceValue = _objNew;
+                                            hub.UpdateFieldInEditor(obj);
                                         }
                                     }
                                     else
@@ -1195,6 +1255,7 @@ namespace UnityEditor.UI
                                             {
                                                 obj.Value = valueNew;
                                                 mySerializedProperty.obj.stringValue = obj.value;
+                                                hub.UpdateFieldInEditor(obj);
                                             }
                                         }
                                         catch
@@ -1245,19 +1306,33 @@ namespace UnityEditor.UI
         {
             return EditorGUILayout.Slider(content, Convert.ToSingle(valueOld), range.min, range.max);
         }
-        void ProcessList(KissSerializableObject obj, MySerializedProperty mySerializedProperty, FieldInfo fi, Action<object, SerializedProperty, int, System.Collections.IList> action, object defaultValue)
+        void ProcessList(HotUpdateBehaviour hub, KissSerializableObject obj, MySerializedProperty mySerializedProperty, FieldInfo fi, Action<object, SerializedProperty, int, System.Collections.IList> action, object defaultValue)
         {
             EditorGUILayout.BeginHorizontal();
             System.Collections.IList valueOld = obj.Value as System.Collections.IList;
+            Array array = valueOld as Array;
             int countOld = valueOld.Count;
             int countNew = EditorGUILayout.IntField(GetTrTextContent(fi), valueOld.Count);
+            SerializedProperty serializedPropertys = null;
+            switch(obj.objectType)
+            {
+                case KissSerializableObject.ObjectType.LikeBehaviourObjects:
+                case KissSerializableObject.ObjectType.LikeBehaviourObjects2:
+                case KissSerializableObject.ObjectType.UnityEngineObjects:
+                case KissSerializableObject.ObjectType.UnityEngineObjects2:
+                    serializedPropertys = mySerializedProperty.objs;
+                    break;
+                default:
+                    serializedPropertys = mySerializedProperty.values;
+                    break;
+            }
             if (countOld != countNew)
             {
                 if (countNew <= 0)
                 {
                     countNew = 0;
                     valueOld.Clear();
-                    mySerializedProperty.values.ClearArray();
+                    serializedPropertys.ClearArray();
                 }
                 else if (countOld < countNew)//+
                 {
@@ -1273,29 +1348,51 @@ namespace UnityEditor.UI
                     while (count-- > 0)
                         valueOld.RemoveAt(valueOld.Count - 1);
                 }
-                mySerializedProperty.values.arraySize = countNew;
+                serializedPropertys.arraySize = countNew;
                 obj.Value = valueOld;
+                hub.UpdateFieldInEditor(obj);
             }
             if (GUILayout.Button(m_btListAdd, GUILayout.Width(18), GUILayout.Height(18)))
             {
-                valueOld.Add(valueOld.Count > 0 ? valueOld[valueOld.Count - 1] : defaultValue);
-                mySerializedProperty.values.arraySize = valueOld.Count;
-                obj.Value = valueOld;
+                if (array != null)
+                {
+                    array = KissSerializableObject.ResizeArray(array, array.Length + 1);
+                    array.SetValue(valueOld.Count > 0 ? valueOld[valueOld.Count - 1] : defaultValue, array.Length - 1);
+                    serializedPropertys.arraySize = array.Length;
+                    obj.Value = array;
+                }
+                else
+                {
+                    valueOld.Add(valueOld.Count > 0 ? valueOld[valueOld.Count - 1] : defaultValue);
+                    serializedPropertys.arraySize = valueOld.Count;
+                    obj.Value = valueOld;
+                }
+                hub.UpdateFieldInEditor(obj);
             }
             if (GUILayout.Button(m_btListSub, GUILayout.Width(18), GUILayout.Height(18)))
             {
                 if (valueOld.Count > 0)
                 {
-                    valueOld.RemoveAt(valueOld.Count - 1);
-                    mySerializedProperty.values.arraySize = valueOld.Count;
-                    obj.Value = valueOld;
+                    if (array != null)
+                    {
+                        array = KissSerializableObject.ResizeArray(array, array.Length - 1);
+                        serializedPropertys.arraySize = array.Length;
+                        obj.Value = array;
+                    }
+                    else
+                    {
+                        valueOld.RemoveAt(valueOld.Count - 1);
+                        serializedPropertys.arraySize = valueOld.Count;
+                        obj.Value = valueOld;
+                    }
+                    hub.UpdateFieldInEditor(obj);
                 }
             }
             EditorGUILayout.EndVertical();
             EditorGUILayout.BeginVertical();
             if (valueOld.Count > 0)
             {
-                SerializedProperty sp = mySerializedProperty.values.Copy();
+                SerializedProperty sp = serializedPropertys.Copy();
                 sp.Next(true);
                 for (int i = 0; i < valueOld.Count; i++)
                 {
@@ -1304,19 +1401,46 @@ namespace UnityEditor.UI
                     action.Invoke(_valueOld, sp, i, valueOld);
                     if (GUILayout.Button(m_btListElementAdd, GUILayout.Width(18), GUILayout.Height(18)))
                     {
-                        valueOld.Add(valueOld[i]);
-                        mySerializedProperty.values.InsertArrayElementAtIndex(i);
-                        mySerializedProperty.values.arraySize = valueOld.Count;
-                        obj.Value = valueOld;
+                        if (array != null)
+                        {
+                            array = KissSerializableObject.ResizeArray(array, array.Length + 1);
+                            for (int j = array.Length - 1; j > i + 1; j--)
+                                array.SetValue(array.GetValue(j-1), j);
+                            array.SetValue(valueOld[i], i + 1);
+                            serializedPropertys.InsertArrayElementAtIndex(i);
+                            serializedPropertys.arraySize = array.Length;
+                            obj.Value = array;
+                        }
+                        else
+                        {
+                            valueOld.Insert(i + 1, valueOld[i]);
+                            serializedPropertys.InsertArrayElementAtIndex(i);
+                            serializedPropertys.arraySize = valueOld.Count;
+                            obj.Value = valueOld;
+                        }
+                        hub.UpdateFieldInEditor(obj);
                     }
                     if (GUILayout.Button(m_btListElementSub, GUILayout.Width(18), GUILayout.Height(18)))
                     {
                         if (valueOld.Count > 0)
                         {
-                            valueOld.RemoveAt(i);
-                            mySerializedProperty.values.DeleteArrayElementAtIndex(i);
-                            mySerializedProperty.values.arraySize = valueOld.Count;
-                            obj.Value = valueOld;
+                            if (array != null)
+                            {
+                                for (int j = i; j < array.Length-1; j++)
+                                    array.SetValue(array.GetValue(j + 1), j);
+                                array = KissSerializableObject.ResizeArray(array, array.Length - 1);
+                                serializedPropertys.DeleteArrayElementAtIndex(i);
+                                serializedPropertys.arraySize = array.Length;
+                                obj.Value = array;
+                            }
+                            else
+                            {
+                                valueOld.RemoveAt(i);
+                                serializedPropertys.DeleteArrayElementAtIndex(i);
+                                serializedPropertys.arraySize = valueOld.Count;
+                                obj.Value = valueOld;
+                            }
+                            hub.UpdateFieldInEditor(obj);
                         }
                     }
                     EditorGUILayout.EndHorizontal();
