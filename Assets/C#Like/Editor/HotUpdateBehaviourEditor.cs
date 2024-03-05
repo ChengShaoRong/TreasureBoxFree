@@ -983,7 +983,7 @@ namespace UnityEditor.UI
                                             {
                                                 ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
-                                                    Color _valueNew = EditorGUILayout.Vector4Field("   |- Element " + index, (Color)_valueOld);
+                                                    Color _valueNew = EditorGUILayout.ColorField("   |- Element " + index, (Color)_valueOld);
                                                     if (_valueNew != (Color)_valueOld)
                                                     {
                                                         SerializedProperty _sp = sp.GetArrayElementAtIndex(index);
@@ -999,7 +999,7 @@ namespace UnityEditor.UI
                                             {
                                                 ProcessList(hub, obj, mySerializedProperty, fi, (_valueOld, sp, index, valueOld) =>
                                                 {
-                                                    Color _valueNew = EditorGUILayout.Vector4Field("   |- Element " + index, (Color)_valueOld);
+                                                    Color _valueNew = EditorGUILayout.ColorField("   |- Element " + index, (Color)_valueOld);
                                                     if (_valueNew != (Color)_valueOld)
                                                     {
                                                         SerializedProperty _sp = sp.GetArrayElementAtIndex(index);
