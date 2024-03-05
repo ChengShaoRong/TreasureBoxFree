@@ -270,11 +270,18 @@ namespace CSharpLike
                     objectType = ObjectType.Value;
             }
         }
+        static Array ListToArray(System.Collections.IList list)
+        {
+            int count = list.Count;
+            Array array = Activator.CreateInstance(list.GetType().GetGenericArguments()[0].MakeArrayType(), new object[] { count }) as Array;
+            for (int i = 0; i < count; i++)
+                array.SetValue(list[i], i);
+            return array;
+        }
         class SupportInfo
         {
             public MethodInfo miGet;
             public MethodInfo miSet;
-            public MethodInfo miToArray;
         }
         static Dictionary<Type, SupportInfo> mSupportTypes = null;
         static SupportInfo GetSupportInfo(Type type)
@@ -309,8 +316,6 @@ namespace CSharpLike
                         supportInfo.miSet = typeKissSerializableObject.GetMethod($"Set{typeName}Value");
                     if (supportInfo.miSet == null)
                         supportInfo = null;
-                    if (supportInfo != null && supportInfo.miGet != null)
-                        supportInfo.miToArray = type.GetMethod("ToArray");
                 }
             }
             else
@@ -369,11 +374,11 @@ namespace CSharpLike
                             List<object> list = new List<object>();
                             foreach(UnityEngine.Object _obj in objs)
                             {
-                                GameObject gameObject = _obj as GameObject;
+                                HotUpdateBehaviour hub = _obj as HotUpdateBehaviour;
                                 object _obj_ = null;
-                                if (gameObject != null)
+                                if (hub != null && hub.gameObject != null)
                                 {
-                                    foreach (HotUpdateBehaviour behaviour in gameObject.GetComponents<HotUpdateBehaviour>())
+                                    foreach (HotUpdateBehaviour behaviour in hub.gameObject.GetComponents<HotUpdateBehaviour>())
                                     {
                                         if (behaviour.bindHotUpdateClassFullName == typeFullName)
                                         {
@@ -391,11 +396,11 @@ namespace CSharpLike
                             List<object> list = new List<object>();
                             foreach (UnityEngine.Object _obj in objs)
                             {
-                                GameObject gameObject = _obj as GameObject;
+                                HotUpdateBehaviour hub = _obj as HotUpdateBehaviour;
                                 object _obj_ = null;
-                                if (gameObject != null)
+                                if (hub != null && hub.gameObject != null)
                                 {
-                                    foreach (HotUpdateBehaviour behaviour in gameObject.GetComponents<HotUpdateBehaviour>())
+                                    foreach (HotUpdateBehaviour behaviour in hub.gameObject.GetComponents<HotUpdateBehaviour>())
                                     {
                                         if (behaviour.bindHotUpdateClassFullName == typeFullName)
                                         {
@@ -433,9 +438,7 @@ namespace CSharpLike
                             supportInfo = GetSupportInfo(Type);
                         if (supportInfo != null && supportInfo.miGet != null)
                         {
-                            object o = supportInfo.miGet.Invoke(this, null);
-                            if (o != null && supportInfo.miToArray != null)
-                                return supportInfo.miToArray.Invoke(o, null);
+                            return ListToArray(supportInfo.miGet.Invoke(this, null) as System.Collections.IList);
                         }
                         Debug.LogError($"Not support serializable type '{typeFullName}'");
                         return Activator.CreateInstance(Type);
@@ -478,11 +481,11 @@ namespace CSharpLike
                                 {
                                     foreach (object _obj in list)
                                     {
-                                        GameObject gameObject = _obj as GameObject;
+                                        HotUpdateBehaviour hub = _obj as HotUpdateBehaviour;
                                         UnityEngine.Object _obj_ = null;
-                                        if (gameObject != null)
+                                        if (hub != null && hub.gameObject != null)
                                         {
-                                            foreach (HotUpdateBehaviour behaviour in gameObject.GetComponents<HotUpdateBehaviour>())
+                                            foreach (HotUpdateBehaviour behaviour in hub.gameObject.GetComponents<HotUpdateBehaviour>())
                                             {
                                                 if (behaviour.bindHotUpdateClassFullName == typeFullName)
                                                 {
@@ -557,10 +560,10 @@ namespace CSharpLike
         {
             get
             {
-                GameObject gameObject = obj as GameObject;
-                if (gameObject != null)
+                HotUpdateBehaviour hub = obj as HotUpdateBehaviour;
+                if (hub != null && hub.gameObject != null)
                 {
-                    foreach (HotUpdateBehaviour behaviour in gameObject.GetComponents<HotUpdateBehaviour>())
+                    foreach (HotUpdateBehaviour behaviour in hub.gameObject.GetComponents<HotUpdateBehaviour>())
                     {
                         if (behaviour.bindHotUpdateClassFullName == typeFullName)
                             return behaviour;
@@ -590,6 +593,7 @@ namespace CSharpLike
             }
             return list;
         }
+
         public void SetListInt64Value(List<long> newValue)
         {
             values.Clear();

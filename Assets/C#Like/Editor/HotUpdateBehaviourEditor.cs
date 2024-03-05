@@ -1328,28 +1328,77 @@ namespace UnityEditor.UI
             }
             if (countOld != countNew)
             {
-                if (countNew <= 0)
+                if (array != null)
                 {
-                    countNew = 0;
-                    valueOld.Clear();
-                    serializedPropertys.ClearArray();
-                }
-                else if (countOld < countNew)//+
-                {
-                    int count = countNew - countOld;
-                    while (count-- > 0)
+                    if (countNew <= 0)
                     {
-                        valueOld.Add(defaultValue);
+                        array = KissSerializableObject.ResizeArray(array, 0);
+                        serializedPropertys.ClearArray();
+                        obj.Value = array;
+                    }
+                    else if (countOld < countNew)//+
+                    {
+                        array = KissSerializableObject.ResizeArray(array, countNew);
+                        object _objDefault = countOld > 0 ? array.GetValue(countOld-1) : defaultValue;
+                        serializedPropertys.arraySize = countNew;
+                        for (int i = countOld; i < countNew; i++)
+                            array.SetValue(_objDefault, i);
+                        obj.Value = array;
+                        for (int i = countOld; i < countNew; i++)
+                        {
+                            switch (obj.objectType)
+                            {
+                                case KissSerializableObject.ObjectType.Values:
+                                case KissSerializableObject.ObjectType.Values2:
+                                    {
+                                        SerializedProperty sp = serializedPropertys.GetArrayElementAtIndex(i);
+                                        sp.stringValue = obj.values[i];
+                                    }
+                                    break;
+                                case KissSerializableObject.ObjectType.UnityEngineObjects:
+                                case KissSerializableObject.ObjectType.UnityEngineObjects2:
+                                case KissSerializableObject.ObjectType.LikeBehaviourObjects:
+                                case KissSerializableObject.ObjectType.LikeBehaviourObjects2:
+                                    {
+                                        SerializedProperty sp = serializedPropertys.GetArrayElementAtIndex(i);
+                                        sp.objectReferenceValue = obj.objs[i];
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    else//-
+                    {
+                        array = KissSerializableObject.ResizeArray(array, countNew);
+                        serializedPropertys.arraySize = countNew;
+                        obj.Value = array;
                     }
                 }
-                else//-
+                else
                 {
-                    int count = countOld - countNew;
-                    while (count-- > 0)
-                        valueOld.RemoveAt(valueOld.Count - 1);
+                    if (countNew <= 0)
+                    {
+                        countNew = 0;
+                        valueOld.Clear();
+                        serializedPropertys.ClearArray();
+                    }
+                    else if (countOld < countNew)//+
+                    {
+                        int count = countNew - countOld;
+                        while (count-- > 0)
+                        {
+                            valueOld.Add(defaultValue);
+                        }
+                    }
+                    else//-
+                    {
+                        int count = countOld - countNew;
+                        while (count-- > 0)
+                            valueOld.RemoveAt(valueOld.Count - 1);
+                    }
+                    serializedPropertys.arraySize = countNew;
+                    obj.Value = valueOld;
                 }
-                serializedPropertys.arraySize = countNew;
-                obj.Value = valueOld;
                 hub.UpdateFieldInEditor(obj);
             }
             if (GUILayout.Button(m_btListAdd, GUILayout.Width(18), GUILayout.Height(18)))
@@ -1357,9 +1406,29 @@ namespace UnityEditor.UI
                 if (array != null)
                 {
                     array = KissSerializableObject.ResizeArray(array, array.Length + 1);
-                    array.SetValue(valueOld.Count > 0 ? valueOld[valueOld.Count - 1] : defaultValue, array.Length - 1);
+                    int i = array.Length - 1;
+                    array.SetValue(valueOld.Count > 0 ? valueOld[valueOld.Count - 1] : defaultValue, i);
                     serializedPropertys.arraySize = array.Length;
                     obj.Value = array;
+                    switch(obj.objectType)
+                    {
+                        case KissSerializableObject.ObjectType.Values:
+                        case KissSerializableObject.ObjectType.Values2:
+                            {
+                                SerializedProperty sp = serializedPropertys.GetArrayElementAtIndex(i);
+                                sp.stringValue = obj.values[i];
+                            }
+                            break;
+                        case KissSerializableObject.ObjectType.UnityEngineObjects:
+                        case KissSerializableObject.ObjectType.UnityEngineObjects2:
+                        case KissSerializableObject.ObjectType.LikeBehaviourObjects:
+                        case KissSerializableObject.ObjectType.LikeBehaviourObjects2:
+                            {
+                                SerializedProperty sp = serializedPropertys.GetArrayElementAtIndex(i);
+                                sp.objectReferenceValue = obj.objs[i];
+                            }
+                            break;
+                    }
                 }
                 else
                 {
