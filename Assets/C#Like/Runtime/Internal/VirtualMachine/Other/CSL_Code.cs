@@ -84,13 +84,7 @@ namespace CSharpLike
                 get;
                 set;
             }
-            public bool IsTrue
-            {
-                get
-                {
-                    return (type == typeof(bool)) ? (bool)Value : (Value != null);
-                }
-            }
+            public bool IsTrue => (type == typeof(bool)) ? (bool)Value : (Value != null);
         }
 
         public abstract class CSL_Code

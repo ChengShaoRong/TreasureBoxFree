@@ -152,13 +152,7 @@ namespace CSharpLike
                 public object value;
                 public CSL_BreakBlock breakBlock = CSL_BreakBlock.None;
                 public Value() { }
-                public bool IsTrue
-                {
-                    get
-                    {
-                        return (type == typeof(bool)) ? (bool)value : (value != null);
-                    }
-                }
+                public bool IsTrue => (type == typeof(bool)) ? (bool)value : (value != null);
                 public static Value FromICLS_Value(CSL_Value value)
                 {
                     Value v = new Value();
