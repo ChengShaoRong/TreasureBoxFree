@@ -206,5 +206,13 @@ namespace CSharpLike
             gameObject = _behaviour.gameObject;
             transform = _behaviour.transform;
         }
+        public sealed override string ToString()
+        {
+            return behaviour.ToString();
+        }
+        public static implicit operator bool(LikeBehaviour likeBehaviour)
+        {
+            return likeBehaviour != null;
+        }
     }
 }
